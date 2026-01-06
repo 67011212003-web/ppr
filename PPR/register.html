@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สมัครสมาชิก | PPR Shop</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #689f38;
+            --dark: #2e7d32;
+            --soft: #f1f8e9;
+        }
+
+        body {
+            background: #f8faf8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ตกแต่งพื้นหลังให้ดูพรีเมียม */
+        .bg-blob {
+            position: absolute; width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(104,159,56,0.15) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%; z-index: -1; filter: blur(40px);
+        }
+
+        .auth-container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 35px;
+            padding: 50px 40px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 440px;
+            border: 1px solid white;
+            z-index: 10;
+        }
+
+        .logo-area img { height: 75px; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .auth-container:hover .logo-area img { transform: rotate(-5deg) scale(1.05); }
+
+        .fb-reg-btn {
+            background: #f0f2f5;
+            color: #1877F2;
+            border: 1px solid #e4e6eb;
+            padding: 14px;
+            width: 100%;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+        .fb-reg-btn:hover { background: #e4e6eb; transform: translateY(-2px); }
+
+        /* Input Styling */
+        .input-group { position: relative; margin-bottom: 22px; }
+        .input-group span.icon {
+            position: absolute; left: 18px; top: 50%;
+            transform: translateY(-50%); color: #bbb; transition: 0.3s;
+        }
+
+        .input-field {
+            background: #f9f9f9;
+            border: 2px solid #f0f0f0;
+            padding: 16px 18px 16px 50px; /* เว้นที่ให้ไอคอนหน้า */
+            border-radius: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            font-family: 'Kanit';
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .input-field:focus {
+            background: white;
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 10px 25px rgba(104, 159, 56, 0.1);
+        }
+
+        .input-field:focus + span.icon { color: var(--primary); }
+
+        /* Strength Meter */
+        .strength-container { margin: -10px 0 25px 5px; }
+        .strength-text { font-size: 0.75rem; color: #888; display: block; margin-bottom: 5px; }
+        .strength-meter { height: 6px; background: #eee; border-radius: 10px; overflow: hidden; }
+        .strength-bar { height: 100%; width: 0%; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white; border: none; padding: 18px; width: 100%;
+            border-radius: 22px; font-size: 1.1rem; font-weight: 600;
+            cursor: pointer; transition: 0.4s;
+            box-shadow: 0 12px 24px rgba(46, 125, 50, 0.25);
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(46, 125, 50, 0.35);
+        }
+
+        .submit-btn:active { transform: scale(0.98); }
+
+        /* Animation */
+        @keyframes spring {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+        .btn-click { animation: spring 0.2s ease-in-out; }
+    </style>
+</head>
+<body>
+
+<div class="bg-blob" style="top: -100px; left: -100px;"></div>
+<div class="bg-blob" style="bottom: -100px; right: -100px; background: radial-gradient(circle, rgba(255,171,0,0.1) 0%, rgba(255,255,255,0) 70%);"></div>
+
+<div class="auth-container" id="authBox">
+    <div class="logo-area" style="text-align: center; margin-bottom: 30px;">
+        <img src="PPR1.png" alt="Logo">
+        <h2 style="margin: 20px 0 8px 0; color: var(--dark); font-size: 1.6rem;">เริ่มต้นสุขภาพดีกับเรา</h2>
+        <p style="color: #777; font-size: 0.9rem;">สมัครสมาชิกเพื่อสะสมแต้มและรับโปรล่วงหน้า</p>
+    </div>
+
+    <button class="fb-reg-btn" onclick="registerWithFB()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" width="22">
+        สมัครด้วย Facebook
+    </button>
+
+    <div style="display: flex; align-items: center; margin: 30px 0; color: #ddd;">
+        <hr style="flex:1; border:0; border-top:1px solid #eee;">
+        <span style="padding: 0 15px; font-size: 0.75rem; color: #bbb; text-transform: uppercase; letter-spacing: 1px;">หรือกรอกอีเมล</span>
+        <hr style="flex:1; border:0; border-top:1px solid #eee;">
+    </div>
+
+    <form id="regForm" onsubmit="handleRegister(event)">
+        <div class="input-group">
+            <span class="icon">👤</span>
+            <input type="text" id="fullname" placeholder="ชื่อ-นามสกุล" class="input-field" required>
+        </div>
+        
+        <div class="input-group">
+            <span class="icon">📧</span>
+            <input type="email" id="email" placeholder="อีเมลของคุณ" class="input-field" required>
+        </div>
+        
+        <div class="input-group" style="margin-bottom: 15px;">
+            <span class="icon">🔒</span>
+            <input type="password" id="password" placeholder="รหัสผ่าน (6+ ตัวอักษร)" class="input-field" required oninput="updateStrength(this.value)">
+            <span class="toggle-password" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); cursor: pointer; opacity: 0.5;" onclick="togglePass()">👁️</span>
+        </div>
+        
+        <div class="strength-container">
+            <span id="strength-label" class="strength-text">ความปลอดภัย: ปานกลาง</span>
+            <div class="strength-meter">
+                <div id="strength-bar" class="strength-bar"></div>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="regBtn">เริ่มต้นใช้งานเลย ✨</button>
+    </form>
+
+    <p style="text-align: center; font-size: 0.9rem; margin-top: 35px; color: #888;">
+        เป็นสมาชิกอยู่แล้ว? <a href="login.html" style="color: var(--primary); text-decoration: none; font-weight: 600; border-bottom: 2px solid var(--soft);">เข้าสู่ระบบ</a>
+    </p>
+</div>
+
+<script>
+    function togglePass() {
+        const passInput = document.getElementById('password');
+        const icon = document.querySelector('.toggle-password');
+        passInput.type = passInput.type === 'password' ? 'text' : 'password';
+        icon.innerText = passInput.type === 'password' ? '👁️' : '🙈';
+    }
+
+    function updateStrength(pass) {
+        const bar = document.getElementById('strength-bar');
+        const label = document.getElementById('strength-label');
+        let strength = 0;
+        
+        if (pass.length >= 6) strength += 25;
+        if (/[A-Z]/.test(pass)) strength += 25;
+        if (/[0-9]/.test(pass)) strength += 25;
+        if (/[^A-Za-z0-9]/.test(pass)) strength += 25;
+
+        bar.style.width = strength + "%";
+        
+        if (strength === 0) {
+            label.innerText = "กรุณาระบุรหัสผ่าน";
+            bar.style.background = "#eee";
+        } else if (strength <= 25) {
+            label.innerText = "ความปลอดภัย: ต่ำ ⚠️";
+            bar.style.background = "#ff4d4d";
+        } else if (strength <= 75) {
+            label.innerText = "ความปลอดภัย: ปานกลาง 👍";
+            bar.style.background = "#ffd11a";
+        } else {
+            label.innerText = "ความปลอดภัย: ยอดเยี่ยม! 🔒";
+            bar.style.background = "#689f38";
+        }
+    }
+
+    function handleRegister(e) {
+        e.preventDefault();
+        const btn = document.getElementById('regBtn');
+        const box = document.getElementById('authBox');
+        
+        if (document.getElementById('password').value.length < 6) {
+            box.style.animation = "shake 0.4s";
+            setTimeout(() => box.style.animation = "", 400);
+            return;
+        }
+
+        btn.classList.add('btn-click');
+        btn.innerText = "กำลังเตรียมกระชังผำให้คุณ...";
+        btn.disabled = true;
+
+        setTimeout(() => {
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.7 },
+                colors: ['#689f38', '#4caf50', '#ffab00']
+            });
+
+            setTimeout(() => {
+                alert('ยินดีต้อนรับ! สมัครสมาชิกสำเร็จแล้วครับ');
+                window.location.href = 'login.html';
+            }, 1200);
+        }, 1500);
+    }
+</script>
+
+</body>
+</html>

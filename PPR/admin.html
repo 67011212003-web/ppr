@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPR HUB | ระบบจัดการหลังบ้าน</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #388e3c;
+            --dark: #1b5e20;
+            --sidebar: #1a202c;
+            --bg: #f7fafc;
+            --white: #ffffff;
+            --text-muted: #718096;
+            --danger: #e53e3e;
+            --card-radius: 20px;
+        }
+
+        body { 
+            font-family: 'Kanit', sans-serif; 
+            background: var(--bg); 
+            margin: 0; 
+            color: #2d3748;
+        }
+
+        .admin-layout { 
+            display: grid; 
+            grid-template-columns: 260px 1fr; 
+            min-height: 100vh; 
+        }
+
+        /* --- Sidebar Design --- */
+        .sidebar {
+            background: var(--sidebar);
+            color: #cbd5e0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .sidebar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #68d391;
+            text-align: center;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .admin-profile {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: var(--card-radius);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .admin-avatar {
+            width: 70px; height: 70px;
+            border-radius: 20px;
+            border: 2px solid #48bb78;
+            margin-bottom: 12px;
+            object-fit: cover;
+        }
+
+        .nav-link {
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: #2d3748;
+            color: #fff;
+        }
+
+        .nav-link.active { border-left: 4px solid #48bb78; }
+
+        /* --- Main Content Area --- */
+        main { padding: 40px; }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        /* Stat Grid */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: var(--card-radius);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--primary);
+        }
+
+        .stat-value { font-size: 1.8rem; font-weight: 600; margin: 10px 0; }
+        .stat-label { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* Table Area */
+        .content-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: var(--card-radius);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .order-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .order-table th {
+            text-align: left;
+            padding: 15px;
+            border-bottom: 2px solid #edf2f7;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .order-table td {
+            padding: 20px 15px;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-success { background: #c6f6d5; color: #22543d; }
+        .status-warning { background: #feebc8; color: #744210; }
+
+        .action-btn {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .action-btn:hover { background: #edf2f7; border-color: #cbd5e0; }
+
+        /* Animations */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-up { animation: slideUp 0.5s ease-out forwards; }
+    </style>
+</head>
+<body>
+
+<div class="admin-layout">
+    <aside class="sidebar">
+        <div class="sidebar-brand">🌿 PPR CONTROL</div>
+        
+        <div class="admin-profile">
+            <img src="https://ui-avatars.com/api/?name=Admin&background=48bb78&color=fff" id="admin-pic" class="admin-avatar">
+            <div id="admin-name" style="font-weight: 600; color: white;">Admin User</div>
+            <div style="font-size: 0.75rem; color: #48bb78;">ออนไลน์</div>
+        </div>
+
+        <nav style="flex-grow: 1;">
+            <a href="#" class="nav-link active">📊 แผงควบคุม</a>
+            <a href="#" class="nav-link">🛒 จัดการคำสั่งซื้อ</a>
+            <a href="#" class="nav-link">📦 คลังสินค้า</a>
+            <a href="#" class="nav-link">👥 บัญชีลูกค้า</a>
+            <a href="#" class="nav-link">⚙️ ตั้งค่าระบบ</a>
+        </nav>
+
+        <a href="#" class="nav-link" style="color: #fc8181; margin-top: auto;" onclick="handleLogout()">🚪 ออกจากระบบ</a>
+    </aside>
+
+    <main class="animate-up">
+        <div class="top-bar">
+            <div>
+                <h1 style="margin: 0; font-size: 1.5rem;">ภาพรวมระบบประจำวัน</h1>
+                <p style="color: var(--text-muted); margin: 5px 0;">ข้อมูลสรุปยอดขายและสต็อกล่าสุด</p>
+            </div>
+            <div style="text-align: right;">
+                <div id="digital-clock" style="font-size: 1.2rem; font-weight: 600; color: var(--primary);">00:00:00</div>
+                <div id="date-display" style="font-size: 0.85rem; color: var(--text-muted);">...</div>
+            </div>
+        </div>
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label">รายได้ (วันนี้)</div>
+                <div class="stat-value">฿14,250</div>
+                <div style="color: #48bb78; font-size: 0.8rem;">↑ 12% จากเมื่อวาน</div>
+            </div>
+            <div class="stat-card" style="--primary: #4299e1;">
+                <div class="stat-label">ออเดอร์ใหม่</div>
+                <div class="stat-value">32 รายการ</div>
+                <div style="color: #4299e1; font-size: 0.8rem;">รอตรวจสอบ 5</div>
+            </div>
+            <div class="stat-card" style="--primary: #ed8936;">
+                <div class="stat-label">สินค้าใกล้หมด</div>
+                <div class="stat-value">3 รายการ</div>
+                <div style="color: #ed8936; font-size: 0.8rem;">ควรเติมสต็อกด่วน</div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="font-size: 1.2rem; margin: 0;">คำสั่งซื้อล่าสุด</h2>
+                <button class="action-btn">ดาวน์โหลดรายงาน (CSV)</button>
+            </div>
+            
+            <table class="order-table">
+                <thead>
+                    <tr>
+                        <th>รหัสสั่งซื้อ</th>
+                        <th>ลูกค้า</th>
+                        <th>ยอดรวม</th>
+                        <th>สถานะ</th>
+                        <th>จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="order-list">
+                    <tr>
+                        <td style="font-weight: 600;">#PPR-2026-001</td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <img src="https://ui-avatars.com/api/?name=Somchai" style="width: 32px; border-radius: 8px;">
+                                <span>สมชาย ใจดี</span>
+                            </div>
+                        </td>
+                        <td>฿450.00</td>
+                        <td><span class="status-badge status-success">ชำระเงินแล้ว</span></td>
+                        <td><button class="action-btn">เปิดดู</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+
+
+
+<script>
+    // ระบบนาฬิกาและวันที่
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('digital-clock').innerText = now.toLocaleTimeString('th-TH');
+        document.getElementById('date-display').innerText = now.toLocaleDateString('th-TH', { 
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+        });
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // ดึงข้อมูลผู้ดูแล
+    document.addEventListener('DOMContentLoaded', () => {
+        const adminName = sessionStorage.getItem("adminName") || "ผู้บริหาร PPR";
+        const adminPic = sessionStorage.getItem("userPic");
+        
+        document.getElementById('admin-name').innerText = adminName;
+        if(adminPic) document.getElementById('admin-pic').src = adminPic;
+    });
+
+    function handleLogout() {
+        if(confirm("คุณต้องการออกจากแผงควบคุมใช่หรือไม่?")) {
+            sessionStorage.clear();
+            window.location.href = "login.html";
+        }
+    }
+</script>
+</body>
+</html>

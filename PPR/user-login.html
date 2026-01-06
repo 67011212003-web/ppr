@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบผู้ใช้งาน | PPR Shop</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .auth-container {
+            max-width: 450px;
+            margin: 60px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .auth-header h2 { color: var(--primary-color); margin-bottom: 10px; }
+        .auth-footer { margin-top: 20px; font-size: 0.9rem; }
+        .social-login { margin: 20px 0; border-top: 1px solid #eee; padding-top: 20px; }
+        .btn-line { background: #00b900; color: white; border: none; padding: 10px; width: 100%; border-radius: 8px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="auth-container">
+    <div class="auth-header">
+        <h2>👋 ยินดีต้อนรับ</h2>
+        <p>เข้าสู่ระบบเพื่อความสะดวกในการสั่งซื้อ</p>
+    </div>
+
+    <form id="loginForm" onsubmit="event.preventDefault(); userLogin();">
+        <input type="email" id="userEmail" placeholder="อีเมลของคุณ" class="input-field" required>
+        <input type="password" id="userPass" placeholder="รหัสผ่าน" class="input-field" required>
+        <button type="submit" class="add-btn" style="margin-top: 15px;">เข้าสู่ระบบ</button>
+    </form>
+
+    <div class="social-login">
+        <p>หรือเข้าสู่ระบบด้วย</p>
+        <button class="btn-line">🟢 เข้าสู่ระบบด้วย LINE</button>
+    </div>
+
+    <div class="auth-footer">
+        ยังไม่มีบัญชี? <a href="register.html" style="color: var(--dark-green); font-weight: bold;">สมัครสมาชิกใหม่</a>
+    </div>
+</div>
+
+<script>
+    function userLogin() {
+        // จำลองการตรวจสอบข้อมูล
+        const email = document.getElementById('userEmail').value;
+        const pass = document.getElementById('userPass').value;
+        
+        // เก็บชื่อผู้ใช้ลง Session เพื่อแสดงผลที่หน้าแรก
+        sessionStorage.setItem("userName", email.split('@')[0]);
+        alert("ยินดีต้อนรับคุณ " + email.split('@')[0]);
+        window.location.href = "index.html";
+    }
+</script>
+</body>
+</html>

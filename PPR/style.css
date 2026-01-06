@@ -1,0 +1,237 @@
+/* 1. Global Setup & Modern Variables */
+:root {
+    --primary-green: #689f38;
+    --primary-light: #8bc34a;
+    --dark-green: #2e7d32;
+    --light-bg: #f8faf8; /* สีเขียวนวลที่ช่วยลดความล้าของสายตา */
+    --white: #ffffff;
+    --text-main: #2c3e50;
+    --text-muted: #64748b;
+    --glass: rgba(255, 255, 255, 0.85);
+    --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.04);
+    --shadow-strong: 0 25px 50px -12px rgba(104, 159, 56, 0.2);
+    --transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); /* Custom Bezier ให้ความรู้สึกหรูหรา */
+}
+
+body {
+    font-family: 'Kanit', sans-serif;
+    background-color: var(--light-bg);
+    margin: 0;
+    color: var(--text-main);
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+/* 2. Announcement Bar: ปรับให้ดูเป็นระดับพรีเมียม */
+.announcement-bar {
+    background: linear-gradient(90deg, #1b4332, var(--dark-green));
+    color: var(--white);
+    text-align: center;
+    padding: 10px;
+    font-size: 0.85rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* 3. Header: Glassmorphism แบบเนียนตา */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--glass);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 20px 0;
+    transition: var(--transition);
+}
+
+/* 4. Hero Banner: ปรับ Gradient ให้ดู Organic */
+.hero-banner {
+    background: radial-gradient(circle at 70% 30%, #f1f8e9 0%, #dcedc8 100%);
+    padding: 120px 0 140px 0;
+    text-align: center;
+    border-radius: 0 0 100px 100px;
+    margin-bottom: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-banner h1 {
+    font-size: 3.8rem;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    background: linear-gradient(135deg, #1b4332 0%, #689f38 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+}
+
+/* 5. Control Panel: ลอยตัวเหนือเนื้อหา (Floating Effect) */
+.control-panel {
+    background: var(--white);
+    padding: 35px;
+    border-radius: 40px;
+    margin: -70px auto 50px; /* ดึงขึ้นไปซ้อนกับ Hero */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 25px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.06);
+    position: relative;
+    z-index: 10;
+    border: 1px solid rgba(255,255,255,0.8);
+}
+
+#searchInput {
+    padding: 16px 28px;
+    border-radius: 50px;
+    border: 2px solid #f1f5f9;
+    width: 350px;
+    font-family: 'Kanit';
+    background: #f8fafc;
+    transition: var(--transition);
+    outline: none;
+    font-size: 1rem;
+}
+
+#searchInput:focus {
+    width: 420px;
+    border-color: var(--primary-green);
+    background: var(--white);
+    box-shadow: 0 10px 25px rgba(104, 159, 56, 0.1);
+}
+
+.filter-btn {
+    border: none;
+    padding: 12px 28px;
+    border-radius: 50px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'Kanit';
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.filter-btn.active {
+    background: var(--primary-green);
+    color: var(--white);
+    box-shadow: 0 12px 24px rgba(104, 159, 56, 0.25);
+}
+
+/* 6. Product Cards: ดีไซน์แบบแอป E-commerce สมัยใหม่ */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    padding-bottom: 50px;
+}
+
+.product-card {
+    background: var(--white);
+    border-radius: 45px;
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 1);
+    transition: var(--transition);
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+}
+
+.product-card:hover {
+    transform: translateY(-20px) scale(1.02);
+    box-shadow: var(--shadow-strong);
+}
+
+.product-img {
+    font-size: 5.5rem;
+    background: linear-gradient(135deg, #f9fbf9 0%, #f1f8e9 100%);
+    border-radius: 40px;
+    padding: 50px;
+    margin-bottom: 30px;
+    display: inline-block;
+    transition: var(--transition);
+    border: 1px solid #f0f4f0;
+}
+
+.product-card:hover .product-img {
+    transform: rotate(10deg) scale(1.1);
+    background: var(--white);
+}
+
+.price {
+    font-size: 2rem;
+    color: var(--dark-green);
+    font-weight: 700;
+    margin: 15px 0;
+}
+
+/* 7. Add to Cart Button: นุ่มนวลแต่ทรงพลัง */
+.add-btn {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+    color: var(--white);
+    border: none;
+    padding: 20px;
+    border-radius: 30px;
+    width: 100%;
+    cursor: pointer;
+    font-family: 'Kanit';
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: var(--transition);
+}
+
+.add-btn:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 15px 35px rgba(46, 125, 50, 0.3);
+    transform: scale(1.02);
+}
+
+/* 8. Modern Badge: โปร่งใสแต่ชัดเจน */
+.badge-fresh {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background: rgba(104, 159, 56, 0.08);
+    color: var(--dark-green);
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid rgba(104, 159, 56, 0.1);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero-banner h1 { font-size: 2.5rem; }
+    .control-panel { padding: 20px; border-radius: 30px; }
+    #searchInput { width: 100%; }
+}
+.item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.category-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    width: fit-content;
+    text-transform: uppercase;
+}
+
+/* สีแยกตามประเภท */
+.cat-fresh { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; } /* ของสด */
+.cat-dried { background: #fff3e0; color: #e65100; border: 1px solid #ffe0b2; } /* ของแห้ง/แปรรูป */
+.cat-tool { background: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }  /* อุปกรณ์ */

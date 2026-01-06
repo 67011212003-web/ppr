@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ชำระเงิน | PPR Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #689f38;
+            --dark: #1b4332;
+            --light-green: #f0f7ee;
+            --accent: #ff9f1c;
+            --bg: #f8fafc;
+        }
+
+        body { font-family: 'Kanit', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #334155; }
+        .container { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; }
+        @media (max-width: 768px) { .container { grid-template-columns: 1fr; } }
+
+        /* Card Styles */
+        .card { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        h2 { margin-top: 0; font-size: 1.25rem; display: flex; align-items: center; gap: 10px; color: var(--dark); }
+
+        /* Cart Table */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th { text-align: left; font-size: 0.85rem; color: #94a3b8; padding-bottom: 10px; border-bottom: 1px solid #f1f5f9; }
+        td { padding: 15px 0; border-bottom: 1px solid #f1f5f9; }
+
+        .category-badge {
+            font-size: 0.65rem; padding: 2px 8px; border-radius: 6px; font-weight: 600;
+            display: inline-block; margin-bottom: 4px;
+        }
+        .cat-fresh { background: #e8f5e9; color: #2e7d32; }
+        .cat-dry { background: #fff3e0; color: #e65100; }
+
+        /* Input Styles */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 0.9rem; margin-bottom: 5px; color: #64748b; }
+        .input-field {
+            width: 100%; padding: 12px; border: 2px solid #f1f5f9; border-radius: 12px;
+            box-sizing: border-box; transition: 0.3s; font-family: inherit;
+        }
+        .input-field:focus { outline: none; border-color: var(--primary); background: white; }
+
+        /* QR Code & Summary */
+        .qr-section { text-align: center; background: var(--light-green); border-radius: 15px; padding: 20px; margin: 20px 0; }
+        #main-qr { width: 180px; height: 180px; background: white; padding: 10px; border-radius: 10px; }
+        .total-row { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .total-final { font-size: 1.5rem; font-weight: 700; color: var(--primary); border-top: 2px dashed #cbd5e1; pt: 15px; margin-top: 15px; }
+
+        .btn-confirm {
+            width: 100%; background: var(--dark); color: white; border: none; padding: 18px;
+            border-radius: 15px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: 0.3s;
+        }
+        .btn-confirm:hover { background: var(--primary); transform: translateY(-2px); }
+        .btn-back { text-decoration: none; color: var(--text-gray); font-size: 0.9rem; display: block; text-align: center; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h2>🛒 สรุปรายการสั่งซื้อ</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>สินค้า</th>
+                    <th style="text-align:center">จำนวน</th>
+                    <th style="text-align:right">ยอดรวม</th>
+                </tr>
+            </thead>
+            <tbody id="cart-list">
+                </tbody>
+        </table>
+
+        <div style="margin-top: 20px;">
+            <label>🚚 เลือกการจัดส่ง</label>
+            <select class="input-field" id="shipping-select" onchange="calculateTotal()">
+                <option value="50">ส่งด่วนโดย Flash/Kerry (+฿50)</option>
+                <option value="0">นัดรับสินค้าเองที่ฟาร์ม (ฟรี)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>📍 ข้อมูลจัดส่ง</h2>
+        <div class="form-group">
+            <input type="text" id="name" class="input-field" placeholder="ชื่อ-นามสกุล">
+        </div>
+        <div class="form-group">
+            <input type="tel" id="phone" class="input-field" placeholder="เบอร์โทรศัพท์">
+        </div>
+        <div class="form-group">
+            <textarea id="address" class="input-field" rows="3" placeholder="ที่อยู่จัดส่งสินค้า..."></textarea>
+        </div>
+
+        <div class="qr-section">
+            <p style="margin-top:0; font-size:0.9rem;">สแกนจ่ายผ่านพร้อมเพย์</p>
+            <img src="" id="main-qr" alt="QR Code">
+            <p style="margin: 10px 0 0; font-weight: 600; color: var(--dark);">นายชญานนท์ อุ่นสีมา</p>
+        </div>
+
+        <div class="summary">
+            <div class="total-row"><span>รวมค่าสินค้า</span> <span id="subtotal">฿0</span></div>
+            <div class="total-row"><span>ค่าจัดส่ง</span> <span id="ship-fee">฿50</span></div>
+            <div class="total-row total-final"><span>ยอดสุทธิ</span> <span id="final-total">฿0</span></div>
+        </div>
+
+        <button class="btn-confirm" onclick="submitOrder()">ยืนยันสั่งซื้อและส่งสลิป ✨</button>
+        <a href="index.html" class="btn-back">← กลับไปเลือกสินค้าเพิ่ม</a>
+    </div>
+</div>
+
+<script>
+    // 1. ดึงข้อมูลจาก LocalStorage ที่บันทึกมาจากหน้าแรก
+    let cart = JSON.parse(localStorage.getItem('ppr_cart')) || [];
+    const myPromptPay = "0812345678"; // <--- เปลี่ยนเป็นเบอร์พร้อมเพย์ของคุณ
+
+    function renderCart() {
+        const cartList = document.getElementById('cart-list');
+        if (cart.length === 0) {
+            cartList.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:40px;">ไม่มีสินค้าในตะกร้า</td></tr>';
+            return;
+        }
+
+        cartList.innerHTML = cart.map((item, index) => {
+            const badgeClass = item.category === 'ของสด' ? 'cat-fresh' : 'cat-dry';
+            return `
+                <tr>
+                    <td>
+                        <span class="category-badge ${badgeClass}">${item.category}</span><br>
+                        <span style="font-weight:500;">${item.name}</span>
+                    </td>
+                    <td style="text-align:center;">
+                        <button onclick="changeQty(${index}, -1)" style="border:none; cursor:pointer;">-</button>
+                        <span style="margin:0 10px;">${item.qty}</span>
+                        <button onclick="changeQty(${index}, 1)" style="border:none; cursor:pointer;">+</button>
+                    </td>
+                    <td style="text-align:right; font-weight:600;">฿${(item.price * item.qty).toLocaleString()}</td>
+                </tr>
+            `;
+        }).join('');
+        
+        calculateTotal();
+    }
+
+    function changeQty(index, delta) {
+        cart[index].qty += delta;
+        if (cart[index].qty <= 0) {
+            cart.splice(index, 1);
+        }
+        localStorage.setItem('ppr_cart', JSON.stringify(cart));
+        renderCart();
+    }
+
+    function calculateTotal() {
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        const shipping = parseInt(document.getElementById('shipping-select').value);
+        const total = subtotal + shipping;
+
+        document.getElementById('subtotal').innerText = `฿${subtotal.toLocaleString()}`;
+        document.getElementById('ship-fee').innerText = `฿${shipping.toLocaleString()}`;
+        document.getElementById('final-total').innerText = `฿${total.toLocaleString()}`;
+
+        // สร้าง QR Code อัตโนมัติด้วยยอดเงินจริง
+        if(total > 0) {
+            document.getElementById('main-qr').src = `https://promptpay.io/${myPromptPay}/${total}.png`;
+        }
+    }
+
+    function submitOrder() {
+        const name = document.getElementById('name').value;
+        if (!name || cart.length === 0) {
+            alert('กรุณากรอกข้อมูลให้ครบถ้วนและเลือกสินค้าครับ');
+            return;
+        }
+        
+        // จำลองการสำเร็จ (ในระบบจริงจะส่งข้อมูลไป LINE หรือ Email)
+        alert('บันทึกคำสั่งซื้อของคุณ ' + name + ' เรียบร้อยแล้ว!');
+        localStorage.removeItem('ppr_cart'); // ล้างตะกร้าหลังสั่งซื้อ
+        window.location.href = 'index.html';
+    }
+
+    // เริ่มทำงานเมื่อโหลดหน้า
+    renderCart();
+</script>
+
+</body>
+</html>
